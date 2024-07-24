@@ -36,4 +36,22 @@
         android:text="ChooseVideo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_above="@id/chooseVideoButton"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_centerHorizontal="true" />
+    <Spinner
+        android:id="@+id/exerciseTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resultTextView"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:entries="@array/exercise_types" />
 </RelativeLayout>
