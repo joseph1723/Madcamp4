@@ -1,7 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clicked item text"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"/>
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
@@ -44,14 +50,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true" />
-    <Spinner
-        android:id="@+id/exerciseTypeSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/resultTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

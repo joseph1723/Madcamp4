@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
-import android.widget.ArrayAdapter
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -40,18 +39,12 @@ class SubmitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_submit)
 
         resultTextView = findViewById(R.id.resultTextView)
-        exerciseTypeSpinner = findViewById(R.id.exerciseTypeSpinner)
         videoView = findViewById(R.id.videoView)
         val submitButton: Button = findViewById(R.id.submitButton)
         val captureButton: Button = findViewById(R.id.captureButton)
         val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
-
-        // Setup exercise type spinner
-        val exerciseTypes = arrayOf("airsquat","overheadsquat","deadlift","pushpress","shoulderpress")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseTypes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        exerciseTypeSpinner.adapter = adapter
-
+        val exerciseType = intent.getStringExtra("ITEM_TEXT")
+        val textView: TextView = findViewById(R.id.textView)
         captureButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -69,7 +62,6 @@ class SubmitActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             videoUri?.let {
-                val exerciseType = exerciseTypeSpinner.selectedItem.toString()
                 FileUploadTask().execute(it, exerciseType)
             }
         }

@@ -13,11 +13,15 @@ import com.example.healthapp.R
 
 class Fragment1 : Fragment(), OnItemClickListener {
 
+    private lateinit var tab1ItemList: List<Tab1Item>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_1, container, false)
+
+        tab1ItemList = getItemList()
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = Tab1ItemAdapter(getItemList(), this)
@@ -32,14 +36,13 @@ class Fragment1 : Fragment(), OnItemClickListener {
             Tab1Item(R.drawable.ic_launcher_foreground, "shoulderpress"),
             Tab1Item(R.drawable.ic_launcher_foreground, "pushpress"),
 
-
-
             )
     }
 
     override fun onItemClick(position: Int) {
+        val clickedItemText = tab1ItemList[position].text
         val intent = Intent(activity, SubmitActivity::class.java)
-        intent.putExtra("ITEM_POSITION", position)
+        intent.putExtra("ITEM_TEXT", clickedItemText)
         startActivity((intent))
     }
 }
