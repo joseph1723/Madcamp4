@@ -5,19 +5,20 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
+import android.widget.ArrayAdapter
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.healthapp.R
-import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
-import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -25,6 +26,8 @@ import java.net.URL
 class SubmitActivity : AppCompatActivity() {
 
     private lateinit var resultTextView: TextView
+    private lateinit var exerciseTypeSpinner: Spinner
+    private lateinit var videoView: VideoView
     private val REQUEST_CAMERA_PERMISSION = 1
     private val REQUEST_VIDEO_CAPTURE = 2
     private val REQUEST_VIDEO_PICK = 3
@@ -35,9 +38,17 @@ class SubmitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_submit)
 
         resultTextView = findViewById(R.id.resultTextView)
+        exerciseTypeSpinner = findViewById(R.id.exerciseTypeSpinner)
+        videoView = findViewById(R.id.videoView)
         val submitButton: Button = findViewById(R.id.submitButton)
         val captureButton: Button = findViewById(R.id.captureButton)
         val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
+
+        // Setup exercise type spinner
+        val exerciseTypes = arrayOf("Squat", "Pushup", "Situp")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseTypes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        exerciseTypeSpinner.adapter = adapter
 
         captureButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
@@ -56,7 +67,8 @@ class SubmitActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             videoUri?.let {
-                FileUploadTask().execute(it)
+                val exerciseType = exerciseTypeSpinner.selectedItem.toString()
+                FileUploadTask().execute(it, exerciseType)
             }
         }
     }
@@ -92,15 +104,25 @@ class SubmitActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             videoUri = data?.data
+            videoUri?.let { playVideo(it) }
         } else if (requestCode == REQUEST_VIDEO_PICK && resultCode == RESULT_OK) {
             videoUri = data?.data
+            videoUri?.let { playVideo(it) }
         }
     }
 
-    private inner class FileUploadTask : AsyncTask<Uri, Void, String>() {
+    private fun playVideo(uri: Uri) {
+        videoView.setVideoURI(uri)
+        videoView.setMediaController(MediaController(this))
+        videoView.requestFocus()
+        videoView.start()
+    }
 
-        override fun doInBackground(vararg params: Uri?): String {
-            val videoUri = params[0]
+    private inner class FileUploadTask : AsyncTask<Any, Void, String>() {
+
+        override fun doInBackground(vararg params: Any?): String {
+            val videoUri = params[0] as Uri
+            val exerciseType = params[1] as String
             val boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
             val urlConnection: HttpURLConnection
             val url = URL("http://172.10.7.128:80/api/upload/")
@@ -113,7 +135,7 @@ class SubmitActivity : AppCompatActivity() {
                 val outputStream = urlConnection.outputStream
                 val writer = OutputStreamWriter(outputStream, "UTF-8")
 
-                // Write the multipart/form-data content
+                // Write the multipart/form-data content for the file
                 writer.write("--$boundary\r\n")
                 writer.write("Content-Disposition: form-data; name=\"file\"; filename=\"video.mp4\"\r\n")
                 writer.write("Content-Type: video/mp4\r\n")
@@ -121,7 +143,7 @@ class SubmitActivity : AppCompatActivity() {
                 writer.flush()
 
                 // Get InputStream from Uri
-                val inputStream: InputStream? = contentResolver.openInputStream(videoUri!!)
+                val inputStream: InputStream? = contentResolver.openInputStream(videoUri)
                 val buffer = ByteArray(1024)
                 var bytesRead: Int
                 inputStream?.use { input ->
@@ -131,6 +153,13 @@ class SubmitActivity : AppCompatActivity() {
                 }
 
                 writer.write("\r\n")
+                writer.flush()
+
+                // Write the multipart/form-data content for the exercise type
+                writer.write("--$boundary\r\n")
+                writer.write("Content-Disposition: form-data; name=\"exercise_type\"\r\n")
+                writer.write("\r\n")
+                writer.write(exerciseType + "\r\n")
                 writer.write("--$boundary--\r\n")
                 writer.flush()
                 writer.close()
