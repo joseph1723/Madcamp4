@@ -1,4 +1,5 @@
 package com.example.healthapp.activity
+
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.AsyncTask
@@ -26,6 +27,7 @@ class SubmitActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private val REQUEST_CAMERA_PERMISSION = 1
     private val REQUEST_VIDEO_CAPTURE = 2
+    private val REQUEST_VIDEO_PICK = 3
     private var videoUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,7 @@ class SubmitActivity : AppCompatActivity() {
         resultTextView = findViewById(R.id.resultTextView)
         val submitButton: Button = findViewById(R.id.submitButton)
         val captureButton: Button = findViewById(R.id.captureButton)
+        val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
 
         captureButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
@@ -45,6 +48,10 @@ class SubmitActivity : AppCompatActivity() {
             } else {
                 dispatchTakeVideoIntent()
             }
+        }
+
+        chooseVideoButton.setOnClickListener {
+            dispatchPickVideoIntent()
         }
 
         submitButton.setOnClickListener {
@@ -73,13 +80,22 @@ class SubmitActivity : AppCompatActivity() {
         }
     }
 
+    private fun dispatchPickVideoIntent() {
+        Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).also { pickVideoIntent ->
+            pickVideoIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(pickVideoIntent, REQUEST_VIDEO_PICK)
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             videoUri = data?.data
+        } else if (requestCode == REQUEST_VIDEO_PICK && resultCode == RESULT_OK) {
+            videoUri = data?.data
         }
     }
-
 
     private inner class FileUploadTask : AsyncTask<Uri, Void, String>() {
 
