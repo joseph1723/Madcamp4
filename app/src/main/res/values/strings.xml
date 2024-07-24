@@ -3,7 +3,11 @@
 
     <string-array name="exercise_types">
         <item>airsquat</item>
-        <item>Pushup</item>
+        <item>overheadsquat</item>
+        <item>deadlift</item>
+        <item>pushpress</item>
         <item>Situp</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

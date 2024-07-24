@@ -17,7 +17,9 @@ import android.widget.ArrayAdapter
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentTransaction
 import com.example.healthapp.R
+import org.json.JSONObject
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -45,7 +47,7 @@ class SubmitActivity : AppCompatActivity() {
         val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
 
         // Setup exercise type spinner
-        val exerciseTypes = arrayOf("Squat", "Pushup", "Situp")
+        val exerciseTypes = arrayOf("airsquat","overheadsquat","deadlift","pushpress","shoulderpress")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         exerciseTypeSpinner.adapter = adapter
@@ -167,17 +169,29 @@ class SubmitActivity : AppCompatActivity() {
                 // Get the server response
                 val responseCode = urlConnection.responseCode
                 val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
-                return "Response Code: $responseCode\n$responseMessage"
+                val jsonResponse = JSONObject(responseMessage)
+                return jsonResponse.optString("advice", "No advice provided")
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 return "Exception: ${e.message}"
             }
         }
-
         override fun onPostExecute(result: String) {
-            resultTextView.text = result
+            showResultFragment(result)
         }
+//        override fun onPostExecute(result: String) {
+//            resultTextView.text = result
+//        }
 
+    }
+    private fun showResultFragment(result: String) {
+        val fragment = AdviceFragment.newInstance(result)
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
