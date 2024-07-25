@@ -1,15 +1,19 @@
 package com.example.healthapp.activity
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.healthapp.R
+import java.util.logging.Handler
 
 data class Exercise(
     val name: String,
@@ -27,7 +31,7 @@ data class ExerciseProbability(
 
 class Fragment3 : Fragment() {
 
-
+    private lateinit var genieImageView: ImageView
     private lateinit var questionTextView: TextView
     private lateinit var yesButton: Button
     private lateinit var maybeYesButton: Button
@@ -63,6 +67,7 @@ class Fragment3 : Fragment() {
 
     private val questionsSoFar = mutableListOf<Int>()
     private val answersSoFar = mutableListOf<Double>()
+    private var isMatShown = false
 
     private val questionsLeft: List<Int>
         get() = questions.keys.toList() - questionsSoFar
@@ -73,6 +78,7 @@ class Fragment3 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_3, container, false)
 
+        genieImageView = view.findViewById(R.id.itemImage)
         questionTextView = view.findViewById(R.id.questionTextView)
         yesButton = view.findViewById(R.id.yesButton)
         maybeYesButton = view.findViewById(R.id.maybeYesButton)
@@ -105,6 +111,34 @@ class Fragment3 : Fragment() {
         return view
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setGenieImageViewSth() {
+        genieImageView.setOnTouchListener(object : View.OnTouchListener {
+            private val handler = android.os.Handler()
+            private var isLongPress = false
+
+            private val longPressRunnable = Runnable {
+                isLongPress = true
+                showHimSth()
+            }
+
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when (event?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        isLongPress = false
+                        handler.postDelayed(longPressRunnable, 3000)
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        handler.removeCallbacks(longPressRunnable)
+                        if (!isLongPress) {
+                            v?.performClick()
+                        }
+                    }
+                }
+                return true
+            }
+        })
+    }
 
     private fun handleAnswer(answer: Double) {
         val currentQuestion = questionsLeft.firstOrNull()
@@ -127,7 +161,18 @@ class Fragment3 : Fragment() {
             questionTextView.text = questions[nextQuestion]
         }
     }
-
+    private fun showHimSth() {
+        if (!isMatShown) {
+            isMatShown = true
+            val dialogView = layoutInflater.inflate(R.layout.mat_dialog, null)
+            AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setPositiveButton("확인") { _, _ ->
+                    isMatShown = false
+                }
+                .show()
+        }
+    }
     private fun showResultDialogue(result: String, description: String, videoUrl: String) {
         val dialogView = layoutInflater.inflate(R.layout.alert_dialog_result, null)
         val resultTextView: TextView = dialogView.findViewById(R.id.resultTextView)
