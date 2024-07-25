@@ -21,17 +21,20 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="운동평가" />
+            android:text="운동평가"
+            android:fontFamily="@font/hakgyo_batang_b"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="운동찾기" />
+            android:text="운동찾기"
+            android:fontFamily="@font/hakgyo_batang_b" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="헬키네이터" />
+            android:text="헬키네이터"
+            android:fontFamily="@font/hakgyo_batang_b" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2

@@ -14,6 +14,8 @@ import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.provider.MediaStore
+import android.util.DisplayMetrics
+import android.util.Log
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -45,11 +47,11 @@ class SubmitActivity : AppCompatActivity() {
         Glide.with(this)
             .load(R.drawable.bg_img)
             .into(findViewById(R.id.backgroundImage))
-        resultTextView = findViewById(R.id.resultTextView)
+
         videoView = findViewById(R.id.videoView)
-        val submitButton: Button = findViewById(R.id.submitButton)
-        val captureButton: Button = findViewById(R.id.captureButton)
-        val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
+        val submitButton: TextView = findViewById(R.id.submitButton)
+        val captureButton: TextView = findViewById(R.id.captureButton)
+        val chooseVideoButton: TextView = findViewById(R.id.chooseVideoButton)
         val exerciseType = intent.getStringExtra("ITEM_TEXT")
         val textView: TextView = findViewById(R.id.textView)
         captureButton.setOnClickListener {
@@ -67,11 +69,25 @@ class SubmitActivity : AppCompatActivity() {
             dispatchPickVideoIntent()
         }
 
+        adjustVideoViewHeight()
+
         submitButton.setOnClickListener {
             videoUri?.let {
+                Log.d("SUBMITBUTTONPRESSED", "$videoUri")
                 FileUploadTask().execute(it, exerciseType)
             }
         }
+    }
+
+    private fun adjustVideoViewHeight() {
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val videoViewHeight = (height * 0.7).toInt()
+
+        val layoutParams = videoView.layoutParams
+        layoutParams.height = videoViewHeight
+        videoView.layoutParams = layoutParams
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -187,8 +203,11 @@ class SubmitActivity : AppCompatActivity() {
 //        }
         override fun onPostExecute(result: String) {
             hideLoadingDialog()
-            resultTextView.text = result
+            showResultFragment(result)
         }
+//        override fun onPostExecute(result: String) {
+//            resultTextView.text = result
+//        }
 
         private fun showLoadingDialog() {
             if (loadingDialog == null) {

@@ -12,51 +12,52 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clicked item text"
+        android:text=" "
         android:layout_centerInParent="true"
         android:textSize="18sp"/>
-    <Button
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+    <TextView
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Data"
+        android:layout_below = "@id/videoView"
+        android:layout_marginLeft="15dp"
+        android:text="제출하기"
+        android:textSize="25dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
-    <Button
+    <TextView
         android:id="@+id/captureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below = "@id/videoView"
         android:layout_toEndOf="@+id/submitButton"
-        android:text="Capture Video"
+        android:layout_marginLeft="15dp"
+        android:text="영상 찍기"
+        android:textSize="25dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
     <TextView
-        android:id="@+id/resultTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/submitButton"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="16sp"/>
-
-    <Button
         android:id="@+id/chooseVideoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below = "@id/videoView"
         android:layout_toStartOf="@+id/submitButton"
-        android:text="Choose Video"
+        android:text="영상 고르기"
+        android:textSize="25dp"
+        android:layout_marginLeft="5dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_above="@id/chooseVideoButton"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_centerHorizontal="true" />
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

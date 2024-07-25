@@ -30,12 +30,14 @@ class Fragment1 : Fragment(), OnItemClickListener {
     }
     private fun getItemList(): List<Tab1Item>{
         return listOf(
-            Tab1Item(R.drawable.ic_launcher_foreground, "airsquat"),
-            Tab1Item(R.drawable.ic_launcher_foreground, "overheadsquat"),
-            Tab1Item(R.drawable.ic_launcher_foreground, "deadlift"),
-            Tab1Item(R.drawable.ic_launcher_foreground, "shoulderpress"),
-            Tab1Item(R.drawable.ic_launcher_foreground, "pushpress"),
-
+            Tab1Item(R.drawable.airsquaticon, "airsquat"),
+            Tab1Item(R.drawable.overheadsquaticon, "overheadsquat"),
+            Tab1Item(R.drawable.frontsquaticon, "frontsquat"),
+            Tab1Item(R.drawable.deadlifticon, "deadlift"),
+            Tab1Item(R.drawable.shoulderpressicon, "shoulderpress"),
+            Tab1Item(R.drawable.pushpressicon, "pushpress"),
+            Tab1Item(R.drawable.sumodeadliftpullhighicon, "sumodeadliftpullhigh"),
+            Tab1Item(R.drawable.medicineballicon, "medicineball"),
             )
     }
 
