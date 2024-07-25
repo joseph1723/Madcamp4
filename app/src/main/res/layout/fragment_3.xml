@@ -14,36 +14,40 @@
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="200dp"
+        android:layout_below="@id/questionTextView"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/healkinater"/>
 
     <LinearLayout
         android:id="@+id/buttonLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/questionTextView"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/itemImage"
+        android:layout_marginTop="1dp"
         android:gravity="center">
+
+
         <Button
             android:id="@+id/yesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="예"
             android:layout_below="@id/questionTextView"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@id/noButton"/>
-
+            android:layout_toStartOf="@id/noButton"
+            android:text="예" />
 
         <Button
             android:id="@+id/noButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="아니오"
             android:layout_below="@id/questionTextView"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"/>
+            android:text="아니오" />
     </LinearLayout>
 
     <LinearLayout

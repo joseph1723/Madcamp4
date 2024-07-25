@@ -8,13 +8,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.healthapp.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.bumptech.glide.Glide
+
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Glide.with(this)
+            .load(R.drawable.bg_img)
+            .into(findViewById(R.id.backgroundImage))
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
 
