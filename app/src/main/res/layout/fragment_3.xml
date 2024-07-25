@@ -1,9 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.Fragment3">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/questionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="질문이 여기에 표시됩니다."
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+    <ImageView
+        android:id="@+id/Ajushi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/questionTextView"
+        android:layout_marginTop="20dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/yesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="예"
+            android:layout_below="@id/questionTextView"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/noButton"/>
 
 
-</FrameLayout>
+        <Button
+            android:id="@+id/noButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아니오"
+            android:layout_below="@id/questionTextView"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/buttonLayout1"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/maybeYesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아마도 그럴 겁니다"
+            android:layout_below="@id/questionTextView"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/noButton"/>
+
+        <Button
+            android:id="@+id/unknownButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모르겠습니다"
+            android:layout_below="@id/questionTextView"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/maybeNoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아마도 아닐 겁니다"
+            android:layout_below="@id/questionTextView"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+
+    </LinearLayout>
+</RelativeLayout>

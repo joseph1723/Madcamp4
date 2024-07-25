@@ -13,11 +13,12 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
-import android.widget.ArrayAdapter
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentTransaction
 import com.example.healthapp.R
+import org.json.JSONObject
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -38,18 +39,12 @@ class SubmitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_submit)
 
         resultTextView = findViewById(R.id.resultTextView)
-        exerciseTypeSpinner = findViewById(R.id.exerciseTypeSpinner)
         videoView = findViewById(R.id.videoView)
         val submitButton: Button = findViewById(R.id.submitButton)
         val captureButton: Button = findViewById(R.id.captureButton)
         val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
-
-        // Setup exercise type spinner
-        val exerciseTypes = arrayOf("Squat", "Pushup", "Situp")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseTypes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        exerciseTypeSpinner.adapter = adapter
-
+        val exerciseType = intent.getStringExtra("ITEM_TEXT")
+        val textView: TextView = findViewById(R.id.textView)
         captureButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -67,7 +62,6 @@ class SubmitActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             videoUri?.let {
-                val exerciseType = exerciseTypeSpinner.selectedItem.toString()
                 FileUploadTask().execute(it, exerciseType)
             }
         }
@@ -167,17 +161,29 @@ class SubmitActivity : AppCompatActivity() {
                 // Get the server response
                 val responseCode = urlConnection.responseCode
                 val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
-                return "Response Code: $responseCode\n$responseMessage"
+                val jsonResponse = JSONObject(responseMessage)
+                return jsonResponse.optString("advice", "No advice provided")
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 return "Exception: ${e.message}"
             }
         }
-
+//        override fun onPostExecute(result: String) {
+//            showResultFragment(result)
+//        }
         override fun onPostExecute(result: String) {
             resultTextView.text = result
         }
 
+    }
+    private fun showResultFragment(result: String) {
+        val fragment = AdviceFragment.newInstance(result)
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

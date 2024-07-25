@@ -3,20 +3,20 @@ package com.example.healthapp.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.MediaController
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,8 +27,9 @@ import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.nio.ByteBuffer
 
-class Fragment2 : Fragment() {
+class Tab2AnalyzeActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private lateinit var exerciseTypeSpinner: Spinner
     private lateinit var videoView: VideoView
@@ -36,26 +37,21 @@ class Fragment2 : Fragment() {
     private val REQUEST_VIDEO_CAPTURE = 2
     private val REQUEST_VIDEO_PICK = 3
     private var videoUri: Uri? = null
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_2, container, false)
-//        val intent = Intent(activity, Tab2AnalyzeActivity::class.java)
-//        startActivity(intent)
-//        return view
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_2)
 
-        resultTextView = view.findViewById(R.id.resultTextView)
-        videoView = view.findViewById(R.id.videoView)
-        val submitButton: Button = view.findViewById(R.id.submitButton)
-        val captureButton: Button = view.findViewById(R.id.captureButton)
-        val chooseVideoButton: Button = view.findViewById(R.id.chooseVideoButton)
-        val textView: TextView = view.findViewById(R.id.textView)
+        resultTextView = findViewById(R.id.resultTextView)
+        videoView = findViewById(R.id.videoView)
+        val submitButton: Button = findViewById(R.id.submitButton)
+        val captureButton: Button = findViewById(R.id.captureButton)
+        val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
+        val textView: TextView = findViewById(R.id.textView)
         captureButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(),
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     REQUEST_CAMERA_PERMISSION)
             } else {
@@ -72,7 +68,6 @@ class Fragment2 : Fragment() {
                 FileUploadTask().execute(it)
             }
         }
-        return view
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -81,14 +76,14 @@ class Fragment2 : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakeVideoIntent()
             } else {
-                Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun dispatchTakeVideoIntent() {
         Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
-            takeVideoIntent.resolveActivity(requireContext().packageManager)?.also {
+            takeVideoIntent.resolveActivity(packageManager)?.also {
                 startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
             }
         }
@@ -96,7 +91,7 @@ class Fragment2 : Fragment() {
 
     private fun dispatchPickVideoIntent() {
         Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).also { pickVideoIntent ->
-            pickVideoIntent.resolveActivity(requireContext().packageManager)?.also {
+            pickVideoIntent.resolveActivity(packageManager)?.also {
                 startActivityForResult(pickVideoIntent, REQUEST_VIDEO_PICK)
             }
         }
@@ -115,7 +110,7 @@ class Fragment2 : Fragment() {
 
     private fun playVideo(uri: Uri) {
         videoView.setVideoURI(uri)
-        videoView.setMediaController(MediaController(context))
+        videoView.setMediaController(MediaController(this))
         videoView.requestFocus()
         videoView.start()
     }
@@ -133,9 +128,6 @@ class Fragment2 : Fragment() {
                 urlConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
                 urlConnection.doOutput = true
 
-                urlConnection.connectTimeout = 0 // 무제한 대기
-                urlConnection.readTimeout = 0 // 무제한 대기
-
                 val outputStream = urlConnection.outputStream
                 val writer = OutputStreamWriter(outputStream, "UTF-8")
 
@@ -147,7 +139,7 @@ class Fragment2 : Fragment() {
                 writer.flush()
 
                 // Get InputStream from Uri
-                val inputStream: InputStream? = requireContext().contentResolver.openInputStream(videoUri)
+                val inputStream: InputStream? = contentResolver.openInputStream(videoUri)
                 val buffer = ByteArray(1024)
                 var bytesRead: Int
                 inputStream?.use { input ->
@@ -155,44 +147,46 @@ class Fragment2 : Fragment() {
                         outputStream.write(buffer, 0, bytesRead)
                     }
                 }
-                outputStream.flush()
 
+                writer.write("\r\n")
+                writer.flush()
+
+                // Write the multipart/form-data content for the exercise type
+                writer.write("--$boundary\r\n")
+                writer.write("Content-Disposition: form-data; name=\"exercise_type\"\r\n")
                 writer.write("\r\n")
                 writer.write("--$boundary--\r\n")
                 writer.flush()
                 writer.close()
-//                writer.write("\r\n")
-//                writer.flush()
 
                 // Get the server response
-//                val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
-//                val jsonResponse = JSONObject(responseMessage)
-//                return jsonResponse.optString("predict", "No predict provided")
-
                 val responseCode = urlConnection.responseCode
                 val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
                 val jsonResponse = JSONObject(responseMessage)
                 return jsonResponse.optString("predict", "No predict provided")
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 return "Exception: ${e.message}"
             }
         }
-//        override fun onPostExecute(result: String) {
-//            showResultFragment(result)
-//        }
         override fun onPostExecute(result: String) {
-            resultTextView.text = result
+            showResultFragment(result)
         }
+//        override fun onPostExecute(result: String) {
+//            resultTextView.text = result
+//        }
 
     }
     private fun showResultFragment(result: String) {
         val fragment = AdviceFragment.newInstance(result)
-        val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
-    }
-}
+    }}
+
+
+
