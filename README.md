@@ -1,5 +1,4 @@
 # Madcamp4
-This is a 4th project in Mapcamp period
 거기 헬스를 사랑하는 당신! 혹시 다음 중 하나에 해당되진 않으십니까?
 
 - 운동할 때 마다 이상한 곳에 근육통이 생긴다
