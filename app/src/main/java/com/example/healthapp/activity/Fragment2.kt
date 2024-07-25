@@ -1,16 +1,22 @@
 package com.example.healthapp.activity
 
 import android.Manifest
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.MediaController
 import android.widget.Spinner
@@ -20,7 +26,6 @@ import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
 import com.example.healthapp.R
 import org.json.JSONObject
 import java.io.InputStream
@@ -36,16 +41,15 @@ class Fragment2 : Fragment() {
     private val REQUEST_VIDEO_CAPTURE = 2
     private val REQUEST_VIDEO_PICK = 3
     private var videoUri: Uri? = null
+    private var loadingDialog: Dialog? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_2, container, false)
-//        val intent = Intent(activity, Tab2AnalyzeActivity::class.java)
-//        startActivity(intent)
-//        return view
-
         resultTextView = view.findViewById(R.id.resultTextView)
         videoView = view.findViewById(R.id.videoView)
         val submitButton: Button = view.findViewById(R.id.submitButton)
@@ -53,11 +57,20 @@ class Fragment2 : Fragment() {
         val chooseVideoButton: Button = view.findViewById(R.id.chooseVideoButton)
         val textView: TextView = view.findViewById(R.id.textView)
         captureButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(),
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
                     arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_CAMERA_PERMISSION)
+                    REQUEST_CAMERA_PERMISSION
+                )
             } else {
                 dispatchTakeVideoIntent()
             }
@@ -75,7 +88,11 @@ class Fragment2 : Fragment() {
         return view
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -95,7 +112,10 @@ class Fragment2 : Fragment() {
     }
 
     private fun dispatchPickVideoIntent() {
-        Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).also { pickVideoIntent ->
+        Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        ).also { pickVideoIntent ->
             pickVideoIntent.resolveActivity(requireContext().packageManager)?.also {
                 startActivityForResult(pickVideoIntent, REQUEST_VIDEO_PICK)
             }
@@ -122,6 +142,11 @@ class Fragment2 : Fragment() {
 
     private inner class FileUploadTask : AsyncTask<Any, Void, String>() {
 
+        override fun onPreExecute() {
+            super.onPreExecute()
+            showLoadingDialog()
+        }
+
         override fun doInBackground(vararg params: Any?): String {
             val videoUri = params[0] as Uri
             val boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
@@ -130,7 +155,10 @@ class Fragment2 : Fragment() {
             try {
                 urlConnection = url.openConnection() as HttpURLConnection
                 urlConnection.requestMethod = "POST"
-                urlConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+                urlConnection.setRequestProperty(
+                    "Content-Type",
+                    "multipart/form-data; boundary=$boundary"
+                )
                 urlConnection.doOutput = true
 
                 urlConnection.connectTimeout = 0 // 무제한 대기
@@ -147,7 +175,8 @@ class Fragment2 : Fragment() {
                 writer.flush()
 
                 // Get InputStream from Uri
-                val inputStream: InputStream? = requireContext().contentResolver.openInputStream(videoUri)
+                val inputStream: InputStream? =
+                    requireContext().contentResolver.openInputStream(videoUri)
                 val buffer = ByteArray(1024)
                 var bytesRead: Int
                 inputStream?.use { input ->
@@ -161,38 +190,72 @@ class Fragment2 : Fragment() {
                 writer.write("--$boundary--\r\n")
                 writer.flush()
                 writer.close()
-//                writer.write("\r\n")
-//                writer.flush()
 
                 // Get the server response
-//                val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
-//                val jsonResponse = JSONObject(responseMessage)
-//                return jsonResponse.optString("predict", "No predict provided")
-
                 val responseCode = urlConnection.responseCode
-                val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
+                val responseMessage =
+                    urlConnection.inputStream.bufferedReader().use { it.readText() }
                 val jsonResponse = JSONObject(responseMessage)
-                return jsonResponse.optString("predict", "No predict provided")
+                val predict = jsonResponse.optString("predict", "No predict provided")
+                val youtubeUrl = jsonResponse.optString("url", "")
+                Log.d("COMMU TEST", "URL: $youtubeUrl")
+                return "$predict|$youtubeUrl"
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                return "Exception: ${e.message}"
+                return "Exception: ${e.message}|"
             }
         }
-//        override fun onPostExecute(result: String) {
-//            showResultFragment(result)
-//        }
-        override fun onPostExecute(result: String) {
-            resultTextView.text = result
-        }
 
+        override fun onPostExecute(result: String) {
+            hideLoadingDialog()
+            val results = result.split("|")
+            val predict = results[0]
+            val youtubeUrl = if (results.size > 1) results[1] else ""
+            showResultDialog(predict, youtubeUrl)
+        }
     }
-    private fun showResultFragment(result: String) {
-        val fragment = AdviceFragment.newInstance(result)
-        val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+
+    private fun showLoadingDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = Dialog(requireContext()).apply {
+                setContentView(R.layout.loading_dialog)
+                setCancelable(false)
+            }
+        }
+        loadingDialog?.show()
+    }
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
+    }
+
+    private fun showResultDialog(predict: String, youtubeUrl: String) {
+        val dialogView = layoutInflater.inflate(R.layout.alert_dialog_result, null)
+        val resultTextView: TextView = dialogView.findViewById(R.id.resultTextView)
+        val youtubeWebView: WebView = dialogView.findViewById(R.id.youtubeWebView)
+        Log.d("ShowRes TEST", "URL: $youtubeUrl")
+        resultTextView.text = predict
+        val videoHtml =
+            "<iframe width=\"100%\" height=\"100%\" src=\"$youtubeUrl\" frameborder=\"0\" allowfullscreen></iframe>"
+        youtubeWebView.settings.javaScriptEnabled = true
+        Log.d("Htmllllll TEST", "URL: $videoHtml")
+
+        youtubeWebView.webViewClient = WebViewClient()
+        youtubeWebView.settings.domStorageEnabled = true
+        youtubeWebView.loadData(videoHtml, "text/html", "utf-8")
+
+        AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setPositiveButton("확인") { _, _ ->
+                resetFragment()
+            }
+            .show()
+    }
+
+    private fun resetFragment() {
+        videoUri = null
+        videoView.stopPlayback()
+        resultTextView.text = "영상을 올려주세요."
     }
 }
