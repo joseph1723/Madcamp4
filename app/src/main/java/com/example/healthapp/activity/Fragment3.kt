@@ -47,22 +47,22 @@ class Fragment3 : Fragment() {
     )
 
     private val exercises = listOf(
-        Exercise("스플릿 레그 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 1), "스플릿 레그 프레스 머신에 대한 설명", "https://www.youtube.com/embed/videoid1"),
-        Exercise("체스트 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 0), "체스트 프레스 머신에 대한 설명", "https://www.youtube.com/embed/videoid2"),
-        Exercise("런지", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 1), "런지에 대한 설명", "https://www.youtube.com/embed/videoid3"),
-        Exercise("덤벨 숄더 프레스", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 0), "덤벨 숄더 프레스에 대한 설명", "https://www.youtube.com/embed/videoid4"),
-        Exercise("스플릿 레그 컬 머신", mapOf(1 to 1, 2 to 0, 3 to 1, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("시티드 로우 머신", mapOf(1 to 1, 2 to 0, 3 to 1, 4 to 0), "스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("덤벨 데드리프트", mapOf(1 to 1, 2 to 0, 3 to 0, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("덤벨 로우", mapOf(1 to 1, 2 to 0, 3 to 0, 4 to 0),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("레그 프레스 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("체스트 프레스 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 0),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("바벨 스쿼트", mapOf(1 to 0, 2 to 1, 3 to 0, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("바벨 벤치 프레스", mapOf(1 to 0, 2 to 1, 3 to 0, 4 to 0),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("레그 컬 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("렛 풀다운 머신", mapOf(1 to 0, 2 to 0, 3 to 1, 4 to 0),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("바벨 데드리프트", mapOf(1 to 0, 2 to 0, 3 to 0, 4 to 1),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5"),
-        Exercise("바벨 로우", mapOf(1 to 0, 2 to 0, 3 to 0, 4 to 0),"스플릿 레그 컬 머신에 대한 설명", "https://www.youtube.com/embed/videoid5")
+        Exercise("스플릿 레그 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 1), "하체 근력 강화에 도움을 주는 운동", "https://www.youtube.com/embed/ZYDTJaAM-gE"),
+        Exercise("체스트 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 0), "가슴 근육을 타겟으로 하는 머신 운동", "https://www.youtube.com/embed/2y6ntGVg4dw"),
+        Exercise("런지", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 1), "전신 균형과 하체 근력을 강화하는 운동", "https://www.youtube.com/embed/ASdqJoDPMHA"),
+        Exercise("덤벨 숄더 프레스", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 0), "어깨 근육을 발달시키는 운동", "https://www.youtube.com/embed/qEwKCR5JCog"),
+        Exercise("스플릿 레그 컬 머신", mapOf(1 to 1, 2 to 0, 3 to 1, 4 to 1), "허벅지 뒤쪽 근육을 강화하는 머신 운동", "https://www.youtube.com/embed/bb7H0WspSYw"),
+        Exercise("시티드 로우 머신", mapOf(1 to 1, 2 to 0, 3 to 1, 4 to 0), "등 근육을 강화하는 머신 운동", "https://www.youtube.com/embed/TeFo51Q_Nsc"),
+        Exercise("덤벨 데드리프트", mapOf(1 to 1, 2 to 0, 3 to 0, 4 to 1), "전신 근력 강화에 효과적인 운동", "https://www.youtube.com/embed/lJ3QwaXNJfw"),
+        Exercise("덤벨 로우", mapOf(1 to 1, 2 to 0, 3 to 0, 4 to 0), "등 근육을 발달시키는 운동", "https://www.youtube.com/embed/dFzUjzfih7k"),
+        Exercise("레그 프레스 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 1), "하체 근력을 강화하는 머신 운동", "https://www.youtube.com/embed/q4W4_VJbKW0"),
+        Exercise("체스트 프레스 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 0), "가슴 근육을 타겟으로 하는 머신 운동", "https://www.youtube.com/embed/sqNwDkUU_Ps"),
+        Exercise("바벨 스쿼트", mapOf(1 to 0, 2 to 1, 3 to 0, 4 to 1), "하체와 코어 근력을 강화하는 운동", "https://www.youtube.com/embed/sqNwDkUU_Ps"),
+        Exercise("바벨 벤치 프레스", mapOf(1 to 0, 2 to 1, 3 to 0, 4 to 0), "가슴, 어깨, 삼두근을 강화하는 운동", "https://www.youtube.com/embed/4Y2ZdHCOXok"),
+        Exercise("레그 컬 머신", mapOf(1 to 0, 2 to 1, 3 to 1, 4 to 1), "허벅지 뒤쪽 근육을 강화하는 머신 운동", "https://www.youtube.com/embed/SbSNUXPRkc8"),
+        Exercise("렛 풀다운 머신", mapOf(1 to 0, 2 to 0, 3 to 1, 4 to 0), "등 근육을 강화하는 머신 운동", "https://www.youtube.com/embed/CAwf7n6Luuc"),
+        Exercise("바벨 데드리프트", mapOf(1 to 0, 2 to 0, 3 to 0, 4 to 1), "전신 근력을 발달시키는 운동", "https://www.youtube.com/embed/_oyxCn2iSjU"),
+        Exercise("바벨 로우", mapOf(1 to 0, 2 to 0, 3 to 0, 4 to 0), "등 근육을 강화하는 운동", "https://www.youtube.com/embed/FWJR5Ve8bnQ")
     )
 
     private val questionsSoFar = mutableListOf<Int>()
