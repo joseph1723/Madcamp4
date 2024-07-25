@@ -188,14 +188,16 @@ class SubmitActivity : AppCompatActivity() {
 
                 // Get the server response
                 val responseCode = urlConnection.responseCode
+
                 val responseMessage = urlConnection.inputStream.bufferedReader().use { it.readText() }
                 val jsonResponse = JSONObject(responseMessage)
+
                 return jsonResponse.optString("advice", "No advice provided")
 
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                return "Exception: ${e.message}"
+                return "Exception: 전신이 모두 보이도록 찍어주세요"
             }
         }
 //        override fun onPostExecute(result: String) {
