@@ -11,12 +11,15 @@ import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.provider.MediaStore
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.example.healthapp.R
 import org.json.JSONObject
 import java.io.InputStream
@@ -33,11 +36,15 @@ class SubmitActivity : AppCompatActivity() {
     private val REQUEST_VIDEO_CAPTURE = 2
     private val REQUEST_VIDEO_PICK = 3
     private var videoUri: Uri? = null
+    private var loadingDialog: Dialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submit)
-
+        Glide.with(this)
+            .load(R.drawable.bg_img)
+            .into(findViewById(R.id.backgroundImage))
         resultTextView = findViewById(R.id.resultTextView)
         videoView = findViewById(R.id.videoView)
         val submitButton: Button = findViewById(R.id.submitButton)
@@ -114,6 +121,11 @@ class SubmitActivity : AppCompatActivity() {
 
     private inner class FileUploadTask : AsyncTask<Any, Void, String>() {
 
+        override fun onPreExecute() {
+            super.onPreExecute()
+            showLoadingDialog()
+        }
+
         override fun doInBackground(vararg params: Any?): String {
             val videoUri = params[0] as Uri
             val exerciseType = params[1] as String
@@ -174,10 +186,25 @@ class SubmitActivity : AppCompatActivity() {
 //            showResultFragment(result)
 //        }
         override fun onPostExecute(result: String) {
+            hideLoadingDialog()
             resultTextView.text = result
         }
 
+        private fun showLoadingDialog() {
+            if (loadingDialog == null) {
+                loadingDialog = Dialog(this@SubmitActivity).apply {
+                    setContentView(R.layout.loading_dialog)
+                    setCancelable(false)
+                }
+            }
+            loadingDialog?.show()
+        }
     }
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
+    }
+
     private fun showResultFragment(result: String) {
         val fragment = AdviceFragment.newInstance(result)
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
