@@ -4,20 +4,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/easterTextView"
+    android:layout_marginTop="20dp">
     <ImageView
-        android:id="@+id/easterEggImageView"
+        android:id="@+id/EggImageView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/esr1_img" />
+    <ImageView
+        android:id="@+id/EggImageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:src="@drawable/esr2_img" />
+</LinearLayout>
 
     <TextView
-        android:id="@+id/easterEggTextView"
+        android:id="@+id/easterTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="^^"
+        android:text="누군가의 취향인 듯 하다..."
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp" />

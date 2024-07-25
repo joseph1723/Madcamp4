@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.healthapp.R
 import java.util.logging.Handler
 
@@ -38,6 +39,8 @@ class Fragment3 : Fragment() {
     private lateinit var unknownButton: Button
     private lateinit var maybeNoButton: Button
     private lateinit var noButton: Button
+    private lateinit var viewPager: ViewPager2
+
 
     private val questions = mapOf(
         1 to "좌우를 따로 하는 운동입니까?",
@@ -48,7 +51,7 @@ class Fragment3 : Fragment() {
 
     private val exercises = listOf(
         Exercise("스플릿 레그 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 1), "하체 근력 강화에 도움을 주는 운동", "https://www.youtube.com/embed/ZYDTJaAM-gE"),
-        Exercise("체스트 프레스 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 0), "가슴 근육을 타겟으로 하는 머신 운동", "https://www.youtube.com/embed/2y6ntGVg4dw"),
+        Exercise("체스트 플라이 머신", mapOf(1 to 1, 2 to 1, 3 to 1, 4 to 0), "가슴 근육을 타겟으로 하는 머신 운동", "https://www.youtube.com/embed/Z57CtFmRMxA&t=1s"),
         Exercise("런지", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 1), "전신 균형과 하체 근력을 강화하는 운동", "https://www.youtube.com/embed/ASdqJoDPMHA"),
         Exercise("덤벨 숄더 프레스", mapOf(1 to 1, 2 to 1, 3 to 0, 4 to 0), "어깨 근육을 발달시키는 운동", "https://www.youtube.com/embed/qEwKCR5JCog"),
         Exercise("스플릿 레그 컬 머신", mapOf(1 to 1, 2 to 0, 3 to 1, 4 to 1), "허벅지 뒤쪽 근육을 강화하는 머신 운동", "https://www.youtube.com/embed/bb7H0WspSYw"),
@@ -78,6 +81,7 @@ class Fragment3 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_3, container, false)
 
+        viewPager = activity?.findViewById(R.id.viewPager)!!
         genieImageView = view.findViewById(R.id.itemImage)
         questionTextView = view.findViewById(R.id.questionTextView)
         yesButton = view.findViewById(R.id.yesButton)
@@ -105,10 +109,20 @@ class Fragment3 : Fragment() {
         noButton.setOnClickListener {
             handleAnswer(0.0)
         }
-
+        setGenieImageViewSth()
         askNextQuestion()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewPager.isUserInputEnabled = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewPager.isUserInputEnabled = true
     }
 
     @SuppressLint("ClickableViewAccessibility")
