@@ -5,5 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.HealthApp" parent="Base.Theme.HealthApp" />
+<!--    <style name="Theme.HealthApp" parent="Base.Theme.HealthApp" />-->
 </resources>

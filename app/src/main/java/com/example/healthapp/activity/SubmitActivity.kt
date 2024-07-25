@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
+import android.util.DisplayMetrics
+import android.util.Log
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -26,8 +28,6 @@ import java.net.URL
 
 class SubmitActivity : AppCompatActivity() {
 
-    private lateinit var resultTextView: TextView
-    private lateinit var exerciseTypeSpinner: Spinner
     private lateinit var videoView: VideoView
     private val REQUEST_CAMERA_PERMISSION = 1
     private val REQUEST_VIDEO_CAPTURE = 2
@@ -38,11 +38,10 @@ class SubmitActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submit)
 
-        resultTextView = findViewById(R.id.resultTextView)
         videoView = findViewById(R.id.videoView)
-        val submitButton: Button = findViewById(R.id.submitButton)
-        val captureButton: Button = findViewById(R.id.captureButton)
-        val chooseVideoButton: Button = findViewById(R.id.chooseVideoButton)
+        val submitButton: TextView = findViewById(R.id.submitButton)
+        val captureButton: TextView = findViewById(R.id.captureButton)
+        val chooseVideoButton: TextView = findViewById(R.id.chooseVideoButton)
         val exerciseType = intent.getStringExtra("ITEM_TEXT")
         val textView: TextView = findViewById(R.id.textView)
         captureButton.setOnClickListener {
@@ -60,11 +59,25 @@ class SubmitActivity : AppCompatActivity() {
             dispatchPickVideoIntent()
         }
 
+        adjustVideoViewHeight()
+
         submitButton.setOnClickListener {
             videoUri?.let {
+                Log.d("SUBMITBUTTONPRESSED", "$videoUri")
                 FileUploadTask().execute(it, exerciseType)
             }
         }
+    }
+
+    private fun adjustVideoViewHeight() {
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val videoViewHeight = (height * 0.7).toInt()
+
+        val layoutParams = videoView.layoutParams
+        layoutParams.height = videoViewHeight
+        videoView.layoutParams = layoutParams
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -170,12 +183,12 @@ class SubmitActivity : AppCompatActivity() {
                 return "Exception: ${e.message}"
             }
         }
-//        override fun onPostExecute(result: String) {
-//            showResultFragment(result)
-//        }
         override fun onPostExecute(result: String) {
-            resultTextView.text = result
+            showResultFragment(result)
         }
+//        override fun onPostExecute(result: String) {
+//            resultTextView.text = result
+//        }
 
     }
     private fun showResultFragment(result: String) {
