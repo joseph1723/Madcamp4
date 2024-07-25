@@ -21,19 +21,13 @@ This is a 4th project in Mapcamp period
 - Mediapipe를 통해 사용자의 운동 영상을 분석하고 Landmark points들의 정보를 얻은 뒤, 이를 사전 학습된 모델에 넣어 자세를 평가합니다
 - 각 종류의 운동은 다 별개의 모델을 통해 평가됩니다
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/329317e4-18f3-4114-83ad-8c884219e9ca/Untitled.png)
-
-![수많은 EDA의 흔적…](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/c07c4c4f-0267-4179-a6db-46a4b7fd4531/newplot_(1).png)
 
 수많은 EDA의 흔적…
-
-![newplot (5).png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/da83e85d-851b-47b5-8dd9-aafa24e51bfc/newplot_(5).png)
-
-![newplot (4).png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/fc1b326f-c013-4125-9db9-9198a32c8c60/newplot_(4).png)
-
-![newplot (6).png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/36abdfdc-e680-4cea-b192-d9329614bc45/newplot_(6).png)
-
-![newplot (7).png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/28e82f8d-5e1c-485c-9cc9-ce4e793d0bfc/newplot_(7).png)
+![newplot (7)](https://github.com/user-attachments/assets/0ee65c2e-9a7c-4ff5-9e3b-ebf99258ab46)
+![newplot (6)](https://github.com/user-attachments/assets/17299c50-b88f-4482-913d-205976dc95bd)
+![newplot (1)](https://github.com/user-attachments/assets/6ff5d525-71c7-4417-bdc5-9ca75a2f9c31)
+![newplot (5)](https://github.com/user-attachments/assets/92d96e19-a105-401a-9457-d7edfa30bfcc)
+![newplot (4)](https://github.com/user-attachments/assets/ba66111e-7c6b-431e-97d2-a5c30e7a55e9)
 
 ### 2. Exercise classification model
 
@@ -47,30 +41,32 @@ This is a 4th project in Mapcamp period
 - 사용자의 운동 영상을 받아 시간대별로 분석하여 결과를 도출합니다
 - 도출된 결과는 Geminai를 이용하여 사용자가 이해할 수 있게 분석하여 설명합니다
 
-[Untitled video - Made with Clipchamp (4).mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/439f3690-ffb6-4172-ad53-39b5f6232b1b/Untitled_video_-_Made_with_Clipchamp_(4).mp4)
+https://github.com/user-attachments/assets/6c11977d-d0dc-43bc-a92a-b210e658bd1c
 
-[1-2.mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/e61b1d37-1218-4489-bbe8-3f82164dfbfc/1-2.mp4)
+https://github.com/user-attachments/assets/5c8b7d91-1c8b-4e14-86f2-9511dd85d8f3
 
 ## Tab2 - 운동찾기
 
 - **Tab2**는 Exercise classification model을 사용하여 피사체가 수행하고 있는 운동을 추측하는 탭입니다
 - Exercise classification model은 Computer Vision 기술을 사용하여 학습되었습니다
     
-    [Untitled video - Made with Clipchamp (7).mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/d616d7f2-9779-45a1-ac5b-6d89e8d69079/Untitled_video_-_Made_with_Clipchamp_(7).mp4)
     
+
+https://github.com/user-attachments/assets/e8ca5b89-4c78-475d-87cd-028b69f7250b
+
+
 
 ## Tab3 - 헬키네이터
 
 - **Tab3**는 헬키네이터, 사용자의 질문을 받고 찾고 있는 운동이 무엇인가를 추측해내는 탭입니다
 - Bayes theorem을 기반으로 한 naive bayes classifier를 사용하였습니다
 - 질문에 대해 사용자가 제공하는 답을 바탕으로 기존 데이터베이스에 있는 운동 중 어떤 운동을 사용자가 찾고있는지를 추측해냅니다
-    
-    [Untitled video - Made with Clipchamp (6).mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/793cb6bb-6e20-457b-9bf6-3ba72878f99f/Untitled_video_-_Made_with_Clipchamp_(6).mp4)
-    
+
+https://github.com/user-attachments/assets/e0c8a62b-c926-461d-9071-25351e8dc8f0
+
+
 
 # 후기
-
----
 
 ### 조민주
 
