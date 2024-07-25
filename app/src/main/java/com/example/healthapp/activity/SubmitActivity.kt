@@ -170,12 +170,12 @@ class SubmitActivity : AppCompatActivity() {
                 return "Exception: ${e.message}"
             }
         }
-        override fun onPostExecute(result: String) {
-            showResultFragment(result)
-        }
 //        override fun onPostExecute(result: String) {
-//            resultTextView.text = result
+//            showResultFragment(result)
 //        }
+        override fun onPostExecute(result: String) {
+            resultTextView.text = result
+        }
 
     }
     private fun showResultFragment(result: String) {

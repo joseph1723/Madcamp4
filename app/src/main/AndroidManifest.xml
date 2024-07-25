@@ -23,6 +23,8 @@
         <activity
             android:name=".activity.SubmitActivity"
             android:exported="false" />
+        <activity android:name=".activity.Tab2AnalyzeActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
